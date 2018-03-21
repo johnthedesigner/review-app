@@ -1,5 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
+import { Redirect } from "react-router-native";
 import {
   Button,
   Container,
@@ -12,6 +13,15 @@ import {
 } from "native-base";
 
 import { tryLogin } from "../../actions";
+
+const LoginRedirect = props => {
+  if (props.session && props.session.id) {
+    return <Redirect to="/" />;
+  } else {
+    return null;
+  }
+};
+
 export class Login extends React.Component {
   constructor(props) {
     super(props);
@@ -38,12 +48,13 @@ export class Login extends React.Component {
 
   render() {
     let { password, username } = this.state;
-    let { user } = this.props;
+    let { session, user } = this.props;
 
     let loggedInAs = user ? `Logged in as: ${user.username}` : "not logged in";
 
     return (
       <Container>
+        <LoginRedirect session={session} />
         <Form>
           <Item floatingLabel>
             <Label>Username</Label>

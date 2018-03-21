@@ -1,5 +1,6 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
+import { NativeRouter, Route, Link } from "react-router-native";
 import { Provider } from "react-redux";
 import {
   Body,
@@ -17,6 +18,7 @@ import {
 
 import { store } from "./store";
 import LoginContainer from "./views/login/LoginContainer";
+import FooterNav from "./FooterNav";
 
 export default class App extends React.Component {
   async componentWillMount() {
@@ -29,38 +31,22 @@ export default class App extends React.Component {
   render() {
     return (
       <Provider store={store}>
-        <Container>
-          <Header>
-            <Left />
-            <Body>
-              <Title>Header</Title>
-            </Body>
-            <Right />
-          </Header>
-          <Content>
-            <LoginContainer />
-          </Content>
-          <Footer>
-            <FooterTab>
-              <Button vertical>
-                <Icon name="apps" />
-                <Text>Apps</Text>
-              </Button>
-              <Button vertical>
-                <Icon name="camera" />
-                <Text>Camera</Text>
-              </Button>
-              <Button vertical active>
-                <Icon active name="navigate" />
-                <Text>Navigate</Text>
-              </Button>
-              <Button vertical>
-                <Icon name="person" />
-                <Text>Contact</Text>
-              </Button>
-            </FooterTab>
-          </Footer>
-        </Container>
+        <NativeRouter>
+          <Container>
+            <Header>
+              <Left />
+              <Body>
+                <Title>Header</Title>
+              </Body>
+              <Right />
+            </Header>
+            <Content>
+              <Route exact path="/" component={FooterNav} />
+              <Route exact path="/login" component={LoginContainer} />
+            </Content>
+            <FooterNav />
+          </Container>
+        </NativeRouter>
       </Provider>
     );
   }
