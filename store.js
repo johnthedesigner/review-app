@@ -1,17 +1,52 @@
-import { createStore } from "redux";
+import { applyMiddleware, createStore } from "redux";
 
-import { TEST_ACTION } from "./constants";
+import {
+  LOGIN_ERROR,
+  LOGIN_SUCCESS,
+  RECEIVE_USER,
+  TEST_ACTION
+} from "./constants";
 import { testAction } from "./actions";
 
 // Reducer
 const reducer = (state = {}, action) => {
   switch (action.type) {
+    case LOGIN_SUCCESS:
+      return Object.assign({}, state, {
+        session: action.session
+      });
+
+    case LOGIN_ERROR:
+      return Object.assign({}, state, {
+        session: action.error,
+        user: null
+      });
+
+    case RECEIVE_USER:
+      return Object.assign({}, state, {
+        user: action.user
+      });
+
     case TEST_ACTION:
-      console.log("test");
       return state;
 
-      DEFAULT: return state;
+    default:
+      return state;
   }
 };
 
-export const store = createStore(reducer); //TODO: Add initial state from local storage
+const thunk = store => {
+  const dispatch = store.dispatch;
+  const getState = store.getState;
+
+  return next => action => {
+    if (typeof action === "function") {
+      return action(dispatch, getState);
+    }
+
+    console.log(action.type);
+    return next(action);
+  };
+};
+
+export const store = createStore(reducer, applyMiddleware(thunk));
