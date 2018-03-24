@@ -18,26 +18,24 @@ import {
   Title
 } from "native-base";
 
-import { tryLogin } from "../../actions";
+import { trySignUp } from "../../actions";
 
-const LoginRedirect = props => {
-  if (props.session && props.session.id) {
-    return <Redirect to="/" />;
-  } else {
-    return null;
-  }
-};
-
-export class Login extends React.Component {
+export class SignUp extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      email: "",
       username: "",
       password: ""
     };
-    this.submitCredentials = this.submitCredentials.bind(this);
+    this.submitSignUp = this.submitSignUp.bind(this);
+    this.updateEmail = this.updateEmail.bind(this);
     this.updatePassword = this.updatePassword.bind(this);
     this.updateUsername = this.updateUsername.bind(this);
+  }
+
+  updateEmail(value) {
+    this.setState({ email: value });
   }
 
   updatePassword(value) {
@@ -48,32 +46,40 @@ export class Login extends React.Component {
     this.setState({ username: value });
   }
 
-  submitCredentials() {
+  submitSignUp() {
     let credentials = {
+      email: this.state.email.toLowerCase(),
       username: this.state.username.toLowerCase(),
-      password: this.state.password.toLowerCase()
+      password: this.state.password
     };
-    this.props.tryLogin(credentials);
+    this.props.trySignUp(credentials, this.props.history);
   }
 
   render() {
-    let { password, username } = this.state;
-    let { session, user } = this.props;
-
-    let loggedInAs = user ? `Logged in as: ${user.username}` : "not logged in";
+    let { email, password, username } = this.state;
 
     return (
       <Container>
-        <LoginRedirect session={session} />
         <Header>
           <Left />
           <Body>
-            <Title>Login</Title>
+            <Title>Sign up</Title>
           </Body>
           <Right />
         </Header>
         <Content>
           <Form>
+            <Item floatingLabel>
+              <Label>Email</Label>
+              <Input
+                autocapitalize={false}
+                autocorrect={false}
+                autofocus={true}
+                email
+                value={email}
+                onChangeText={this.updateEmail}
+              />
+            </Item>
             <Item floatingLabel>
               <Label>Username</Label>
               <Input
@@ -92,22 +98,10 @@ export class Login extends React.Component {
                 onChangeText={this.updatePassword}
               />
             </Item>
-            <Button
-              block
-              style={{ margin: 10 }}
-              onPress={this.submitCredentials}
-            >
-              <Text>Log in</Text>
+            <Button block style={{ margin: 10 }} onPress={this.submitSignUp}>
+              <Text>Sign up</Text>
             </Button>
           </Form>
-          <Link to="/forgot-password">
-            <Button block transparent style={{ margin: 10 }}>
-              <Text>Forgot password</Text>
-            </Button>
-          </Link>
-          <Link to="/sign-up">
-            <Text style={{ textAlign: "center" }}>Sign up</Text>
-          </Link>
         </Content>
       </Container>
     );
@@ -116,19 +110,19 @@ export class Login extends React.Component {
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    session: state.session,
-    user: state.user
+    // session: state.session,
+    // user: state.user
   };
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    tryLogin: credentials => {
-      dispatch(tryLogin(credentials));
+    trySignUp: (credentials, history) => {
+      dispatch(trySignUp(credentials, history));
     }
   };
 };
 
-const LoginContainer = connect(mapStateToProps, mapDispatchToProps)(Login);
+const SignUpContainer = connect(mapStateToProps, mapDispatchToProps)(SignUp);
 
-export default LoginContainer;
+export default SignUpContainer;

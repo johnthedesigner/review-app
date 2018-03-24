@@ -3,6 +3,7 @@ import { applyMiddleware, createStore } from "redux";
 import {
   LOGIN_ERROR,
   LOGIN_SUCCESS,
+  RECEIVE_FEED,
   RECEIVE_USER,
   TEST_ACTION
 } from "./constants";
@@ -20,6 +21,11 @@ const reducer = (state = {}, action) => {
       return Object.assign({}, state, {
         session: action.error,
         user: null
+      });
+
+    case RECEIVE_FEED:
+      return Object.assign({}, state, {
+        feed: action.feed
       });
 
     case RECEIVE_USER:

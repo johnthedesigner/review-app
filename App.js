@@ -17,7 +17,10 @@ import {
 } from "native-base";
 
 import { store } from "./store";
+import FeedContainer from "./views/feed/FeedContainer";
+import ForgotPasswordContainer from "./views/forgot-password/ForgotPasswordContainer";
 import LoginContainer from "./views/login/LoginContainer";
+import SignUpContainer from "./views/sign-up/SignUpContainer";
 import FooterNav from "./FooterNav";
 
 export default class App extends React.Component {
@@ -33,16 +36,15 @@ export default class App extends React.Component {
       <Provider store={store}>
         <NativeRouter>
           <Container>
-            <Header>
-              <Left />
-              <Body>
-                <Title>Header</Title>
-              </Body>
-              <Right />
-            </Header>
             <Content>
-              <Route exact path="/" component={FooterNav} />
+              <Route exact path="/" component={FeedContainer} />
               <Route exact path="/login" component={LoginContainer} />
+              <Route
+                exact
+                path="/forgot-password"
+                component={ForgotPasswordContainer}
+              />
+              <Route exact path="/sign-up" component={SignUpContainer} />
             </Content>
             <FooterNav />
           </Container>

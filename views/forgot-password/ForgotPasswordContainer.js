@@ -49,11 +49,7 @@ export class Login extends React.Component {
   }
 
   submitCredentials() {
-    let credentials = {
-      username: this.state.username.toLowerCase(),
-      password: this.state.password.toLowerCase()
-    };
-    this.props.tryLogin(credentials);
+    this.props.tryLogin(this.state);
   }
 
   render() {
@@ -105,8 +101,10 @@ export class Login extends React.Component {
               <Text>Forgot password</Text>
             </Button>
           </Link>
-          <Link to="/sign-up">
-            <Text style={{ textAlign: "center" }}>Sign up</Text>
+          <Link to="/register">
+            <Button block transparent style={{ margin: 10 }}>
+              <Text>Sign up</Text>
+            </Button>
           </Link>
         </Content>
       </Container>
