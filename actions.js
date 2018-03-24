@@ -3,6 +3,7 @@ import axios from "axios";
 import {
   LOGIN_ERROR,
   LOGIN_SUCCESS,
+  RECEIVE_CATEGORIES,
   RECEIVE_FEED,
   RECEIVE_USER,
   TEST_ACTION
@@ -121,6 +122,32 @@ export function requestFeed(session) {
         }
       );
       dispatch(receiveFeed(success.data));
+      return success;
+    } catch (error) {
+      console.log(error);
+      // dispatch(requestFeedError(error));
+      return error;
+    }
+  };
+}
+
+export function receiveCategories(categories) {
+  return {
+    type: RECEIVE_CATEGORIES,
+    categories
+  };
+}
+
+export function requestCategories(session) {
+  return async dispatch => {
+    try {
+      let success = await axios.get(
+        "https://review-api.herokuapp.com/api/things/",
+        {
+          params: { access_token: session.id }
+        }
+      );
+      dispatch(receiveCategories(success.data));
       return success;
     } catch (error) {
       console.log(error);

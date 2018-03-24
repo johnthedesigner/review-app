@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Redirect } from "react-router-native";
+import { Link, Redirect } from "react-router-native";
 import _ from "lodash";
 import {
   Body,
@@ -22,7 +22,7 @@ import {
   Title
 } from "native-base";
 
-import { requestFeed } from "../../actions";
+import { requestCategories } from "../../actions";
 
 // Redirect to login if there is no active session
 // TODO: also check for expired token
@@ -34,13 +34,14 @@ const LoginRedirect = props => {
   }
 };
 
-export class Feed extends React.Component {
+export class Categories extends React.Component {
   componentDidMount() {
-    this.props.requestFeed(this.props.session);
+    this.props.requestCategories(this.props.session);
   }
 
   render() {
-    let { session } = this.props;
+    let { categories, session } = this.props;
+    console.log(categories);
 
     return (
       <Container>
@@ -48,23 +49,27 @@ export class Feed extends React.Component {
           <Header>
             <Left />
             <Body>
-              <Title>Feed</Title>
+              <Title>Things</Title>
             </Body>
-            <Right />
+            <Right>
+              <Link to="/">
+                <Text>New</Text>
+              </Link>
+            </Right>
           </Header>
           <LoginRedirect session={session} />
           <List>
-            {_.map(this.props.feed, item => {
+            {_.map(this.props.categories, category => {
               return (
-                <ListItem key={item.id}>
+                <ListItem key={category.id}>
                   <Thumbnail
                     square
                     size={80}
                     source={{ uri: "http://placehold.it/80/80" }}
                   />
                   <Body>
-                    <Text>{item.title}</Text>
-                    <Text note>{item.content}</Text>
+                    <Text>{category.name}</Text>
+                    <Text note>{category.desc}</Text>
                   </Body>
                 </ListItem>
               );
@@ -78,19 +83,21 @@ export class Feed extends React.Component {
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    feed: state.feed,
+    categories: state.categories,
     session: state.session
   };
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    requestFeed: session => {
-      dispatch(requestFeed(session));
+    requestCategories: session => {
+      dispatch(requestCategories(session));
     }
   };
 };
 
-const FeedContainer = connect(mapStateToProps, mapDispatchToProps)(Feed);
+const CategoriesContainer = connect(mapStateToProps, mapDispatchToProps)(
+  Categories
+);
 
-export default FeedContainer;
+export default CategoriesContainer;

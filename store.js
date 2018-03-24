@@ -3,6 +3,7 @@ import { applyMiddleware, createStore } from "redux";
 import {
   LOGIN_ERROR,
   LOGIN_SUCCESS,
+  RECEIVE_CATEGORIES,
   RECEIVE_FEED,
   RECEIVE_USER,
   TEST_ACTION
@@ -21,6 +22,11 @@ const reducer = (state = {}, action) => {
       return Object.assign({}, state, {
         session: action.error,
         user: null
+      });
+
+    case RECEIVE_CATEGORIES:
+      return Object.assign({}, state, {
+        categories: action.categories
       });
 
     case RECEIVE_FEED:

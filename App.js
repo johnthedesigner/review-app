@@ -20,6 +20,7 @@ import { store } from "./store";
 import FeedContainer from "./views/feed/FeedContainer";
 import LoginContainer from "./views/login/LoginContainer";
 import SignUpContainer from "./views/sign-up/SignUpContainer";
+import ThingsContainer from "./views/things/ThingsContainer";
 import FooterNav from "./FooterNav";
 
 export default class App extends React.Component {
@@ -39,6 +40,7 @@ export default class App extends React.Component {
               <Route exact path="/" component={FeedContainer} />
               <Route exact path="/login" component={LoginContainer} />
               <Route exact path="/sign-up" component={SignUpContainer} />
+              <Route exact path="/things" component={ThingsContainer} />
             </Content>
             <FooterNav />
           </Container>

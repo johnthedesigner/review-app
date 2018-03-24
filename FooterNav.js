@@ -19,10 +19,9 @@ export default class FooterNav extends React.Component {
     return (
       <Footer>
         <FooterTab>
-          <NavItem icon="apps" text="Apps" to="/login" />
-          <NavItem icon="navigate" text="Navigate" to="/" />
-          <NavItem icon="camera" text="Camera" to="/" />
-          <NavItem icon="person" text="Person" to="/" />
+          <NavItem icon="person" text="Login" to="/login" />
+          <NavItem icon="star" text="Feed" to="/" />
+          <NavItem icon="list" text="Things" to="/things" />
         </FooterTab>
       </Footer>
     );
