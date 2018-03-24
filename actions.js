@@ -118,7 +118,7 @@ export function requestFeed(session) {
       let success = await axios.get(
         "https://review-api.herokuapp.com/api/reviews/",
         {
-          params: { access_token: session.id, filter: { include: "reviewer" } }
+          params: { access_token: session.id, filter: { include: "thing" } }
         }
       );
       dispatch(receiveFeed(success.data));

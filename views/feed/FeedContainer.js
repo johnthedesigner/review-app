@@ -55,6 +55,7 @@ export class Feed extends React.Component {
           <LoginRedirect session={session} />
           <List>
             {_.map(this.props.feed, item => {
+              console.log(item.thing);
               return (
                 <ListItem key={item.id}>
                   <Thumbnail
@@ -63,6 +64,7 @@ export class Feed extends React.Component {
                     source={{ uri: "http://placehold.it/80/80" }}
                   />
                   <Body>
+                    <Text note>{item.thing.name}</Text>
                     <Text>{item.title}</Text>
                     <Text note>{item.content}</Text>
                   </Body>
