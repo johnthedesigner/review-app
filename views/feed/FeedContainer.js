@@ -1,13 +1,15 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Redirect } from "react-router-native";
+import { Link, Redirect } from "react-router-native";
 import _ from "lodash";
 import {
   Body,
   Button,
+  Col,
   Container,
   Content,
   Form,
+  Grid,
   Header,
   Icon,
   Input,
@@ -55,19 +57,25 @@ export class Feed extends React.Component {
           <LoginRedirect session={session} />
           <List>
             {_.map(this.props.feed, item => {
-              console.log(item.thing);
               return (
                 <ListItem key={item.id}>
-                  <Thumbnail
-                    square
-                    size={80}
-                    source={{ uri: "http://placehold.it/80/80" }}
-                  />
-                  <Body>
-                    <Text note>{item.thing.name}</Text>
-                    <Text>{item.title}</Text>
-                    <Text note>{item.content}</Text>
-                  </Body>
+                  <Grid>
+                    <Col style={{ width: 70 }}>
+                      <Thumbnail
+                        size={80}
+                        source={{ uri: "http://placehold.it/80/80" }}
+                      />
+                    </Col>
+                    <Col>
+                      <Body>
+                        <Text note>{item.thing.name}</Text>
+                        <Link to={`/reviews/${item.id}`}>
+                          <Text>{item.title}</Text>
+                        </Link>
+                        <Text note>{item.content}</Text>
+                      </Body>
+                    </Col>
+                  </Grid>
                 </ListItem>
               );
             })}
@@ -80,7 +88,9 @@ export class Feed extends React.Component {
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    feed: state.feed,
+    feed: _.map(state.feed, reviewId => {
+      return state.reviewsById[reviewId];
+    }),
     session: state.session
   };
 };

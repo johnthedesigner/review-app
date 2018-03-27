@@ -3,8 +3,9 @@ import axios from "axios";
 import {
   LOGIN_ERROR,
   LOGIN_SUCCESS,
-  RECEIVE_CATEGORIES,
   RECEIVE_FEED,
+  RECEIVE_REVIEW,
+  RECEIVE_THINGS,
   RECEIVE_USER,
   TEST_ACTION
 } from "./constants";
@@ -105,10 +106,10 @@ export function requestUserData(session) {
   };
 }
 
-export function receiveFeed(feed) {
+export function receiveFeed(reviews) {
   return {
     type: RECEIVE_FEED,
-    feed
+    reviews
   };
 }
 
@@ -131,23 +132,50 @@ export function requestFeed(session) {
   };
 }
 
-export function receiveCategories(categories) {
+export function receiveThings(things) {
+  console.log(things);
   return {
-    type: RECEIVE_CATEGORIES,
-    categories
+    type: RECEIVE_THINGS,
+    things
   };
 }
 
-export function requestCategories(session) {
+export function requestThings(session) {
   return async dispatch => {
     try {
       let success = await axios.get(
-        "https://review-api.herokuapp.com/api/things/",
+        "https://review-api.herokuapp.com/api/things",
         {
           params: { access_token: session.id }
         }
       );
-      dispatch(receiveCategories(success.data));
+      dispatch(receiveThings(success.data));
+      return success;
+    } catch (error) {
+      console.log(error);
+      // dispatch(requestFeedError(error));
+      return error;
+    }
+  };
+}
+
+export function receiveReview(review) {
+  return {
+    type: RECEIVE_REVIEW,
+    review
+  };
+}
+
+export function requestReview(reviewId, session) {
+  return async dispatch => {
+    try {
+      let success = await axios.get(
+        `https://review-api.herokuapp.com/api/reviews/${reviewId}`,
+        {
+          params: { access_token: session.id, filter: { include: "thing" } }
+        }
+      );
+      dispatch(receiveReview(success.data));
       return success;
     } catch (error) {
       console.log(error);

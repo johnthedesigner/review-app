@@ -1,10 +1,12 @@
 import { applyMiddleware, createStore } from "redux";
+import _ from "lodash";
 
 import {
   LOGIN_ERROR,
   LOGIN_SUCCESS,
-  RECEIVE_CATEGORIES,
   RECEIVE_FEED,
+  RECEIVE_REVIEW,
+  RECEIVE_THINGS,
   RECEIVE_USER,
   TEST_ACTION
 } from "./constants";
@@ -24,14 +26,34 @@ const reducer = (state = {}, action) => {
         user: null
       });
 
-    case RECEIVE_CATEGORIES:
+    case RECEIVE_THINGS:
       return Object.assign({}, state, {
-        categories: action.categories
+        thingsById: _.merge(
+          _.cloneDeep(state.thingsById),
+          _.keyBy(action.things, "id")
+        ),
+        thingsList: _.map(action.things, thing => {
+          return thing.id;
+        })
       });
 
     case RECEIVE_FEED:
       return Object.assign({}, state, {
-        feed: action.feed
+        reviewsById: _.merge(
+          _.cloneDeep(state.reviewsById),
+          _.keyBy(action.reviews, "id")
+        ),
+        feed: _.map(action.reviews, review => {
+          return review.id;
+        })
+      });
+
+    case RECEIVE_REVIEW:
+      return Object.assign({}, state, {
+        reviewsById: _.merge(
+          _.cloneDeep(state.reviewsById),
+          _.keyBy([action.review], "id")
+        )
       });
 
     case RECEIVE_USER:

@@ -22,7 +22,7 @@ import {
   Title
 } from "native-base";
 
-import { requestCategories } from "../../actions";
+import { requestThings } from "../../actions";
 
 // Redirect to login if there is no active session
 // TODO: also check for expired token
@@ -34,14 +34,14 @@ const LoginRedirect = props => {
   }
 };
 
-export class Categories extends React.Component {
+export class Things extends React.Component {
   componentDidMount() {
-    this.props.requestCategories(this.props.session);
+    this.props.requestThings(this.props.session);
   }
 
   render() {
-    let { categories, session } = this.props;
-    console.log(categories);
+    let { things, session } = this.props;
+    console.log(things);
 
     return (
       <Container>
@@ -59,17 +59,17 @@ export class Categories extends React.Component {
           </Header>
           <LoginRedirect session={session} />
           <List>
-            {_.map(this.props.categories, category => {
+            {_.map(this.props.things, thing => {
               return (
-                <ListItem key={category.id}>
+                <ListItem key={thing.id}>
                   <Thumbnail
                     square
                     size={80}
                     source={{ uri: "http://placehold.it/80/80" }}
                   />
                   <Body>
-                    <Text>{category.name}</Text>
-                    <Text note>{category.desc}</Text>
+                    <Text>{thing.name}</Text>
+                    <Text note>{thing.desc}</Text>
                   </Body>
                 </ListItem>
               );
@@ -83,21 +83,21 @@ export class Categories extends React.Component {
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    categories: state.categories,
+    things: _.map(state.thingsList, thingId => {
+      return state.thingsById[thingId];
+    }),
     session: state.session
   };
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    requestCategories: session => {
-      dispatch(requestCategories(session));
+    requestThings: session => {
+      dispatch(requestThings(session));
     }
   };
 };
 
-const CategoriesContainer = connect(mapStateToProps, mapDispatchToProps)(
-  Categories
-);
+const ThingsContainer = connect(mapStateToProps, mapDispatchToProps)(Things);
 
-export default CategoriesContainer;
+export default ThingsContainer;

@@ -22,6 +22,7 @@ import { tryLogin } from "../../actions";
 
 const LoginRedirect = props => {
   if (props.session && props.session.id) {
+    // return <Redirect to="/reviews/8a714160-d9cd-11e6-8055-4d319f90ce84" />;
     return <Redirect to="/" />;
   } else {
     return null;
