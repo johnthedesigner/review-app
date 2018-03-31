@@ -19,6 +19,7 @@ export function testAction(payload) {
 }
 
 export function loginSuccess(session) {
+  console.log("session", session);
   return {
     type: LOGIN_SUCCESS,
     session
@@ -73,12 +74,10 @@ export function trySignUp(credentials, history) {
         "https://review-api.herokuapp.com/api/reviewers",
         credentials
       );
-      // dispatch(signUpSuccess(success.data));
       history.push("/login");
       return success;
     } catch (error) {
       console.log("try sign up", error);
-      // dispatch(signUpError(error));
       return error;
     }
   };
@@ -102,7 +101,6 @@ export function requestUserData(session) {
       return success;
     } catch (error) {
       console.log("request user data", error);
-      // dispatch(loginError(error));
       return error;
     }
   };
@@ -128,7 +126,6 @@ export function requestFeed(session) {
       return success;
     } catch (error) {
       console.log("request feed", error);
-      // dispatch(requestFeedError(error));
       return error;
     }
   };
@@ -154,7 +151,6 @@ export function requestThings(session) {
       return success;
     } catch (error) {
       console.log("request things", error);
-      // dispatch(requestFeedError(error));
       return error;
     }
   };
@@ -180,7 +176,6 @@ export function requestReview(reviewId, session) {
       return success;
     } catch (error) {
       console.log("request review", error);
-      // dispatch(requestFeedError(error));
       return error;
     }
   };
@@ -207,7 +202,25 @@ export function requestThing(thingId, session) {
       return success;
     } catch (error) {
       console.log("request thing", error);
-      // dispatch(requestFeedError(error));
+      return error;
+    }
+  };
+}
+
+export function postReview(review, session, history) {
+  return async dispatch => {
+    try {
+      console.log(...review);
+      let success = await axios.post(
+        `https://review-api.herokuapp.com/api/reviews/?access_token=${
+          session.id
+        }`,
+        review
+      );
+      history.push(`/reviews/${success.data.id}`);
+      return success;
+    } catch (error) {
+      console.log("post review", error);
       return error;
     }
   };

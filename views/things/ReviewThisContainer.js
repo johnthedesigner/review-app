@@ -27,8 +27,7 @@ import {
   Title
 } from "native-base";
 
-// import FiveStars from "../../components/FiveStars";
-import { requestThing } from "../../actions";
+import { postReview, requestThing } from "../../actions";
 
 // Redirect to login if there is no active session
 // TODO: also check for expired token
@@ -41,6 +40,7 @@ const LoginRedirect = props => {
 };
 
 const FiveStars = props => {
+  // TODO: figure out what's going wrong when I move this into its own module
   // Supply a star rating value from state and an optional onPress
   let { onPress, value } = props;
 
@@ -66,10 +66,27 @@ export class ReviewThis extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      text: "",
+      title: "TEMP", // TODO: Make sure title isn't required or eliminate
+      content: "",
       rating: null
     };
+    this.submitReview = this.submitReview.bind(this);
     this.updateField = this.updateField.bind(this);
+  }
+
+  submitReview() {
+    let { title, content, rating } = this.state;
+    let { history, session } = this.props;
+    let thingId = this.props.thing.id;
+    let reviewerId = session.userId;
+    let review = {
+      title,
+      content,
+      rating,
+      thingId,
+      reviewerId
+    };
+    this.props.postReview(review, session, history);
   }
 
   updateField(field, value) {
@@ -143,14 +160,18 @@ export class ReviewThis extends React.Component {
                     placeholder="Type your review here"
                     minHeight={100}
                     onChange={e => {
-                      this.updateField("text", e.target.value);
+                      this.updateField("content", e.nativeEvent.text);
                     }}
-                    value={this.state.text}
+                    value={this.state.content}
                   />
                 </Col>
               </Row>
               <Row>
-                <Button block disabled={!this.state.text || !this.state.rating}>
+                <Button
+                  block
+                  disabled={!this.state.content || !this.state.rating}
+                  onPress={this.submitReview}
+                >
                   <Text>Submit review</Text>
                 </Button>
               </Row>
@@ -173,6 +194,9 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
+    postReview: (review, session, history) => {
+      dispatch(postReview(review, session, history));
+    },
     requestThing: (thingId, session) => {
       dispatch(requestThing(thingId, session));
     }

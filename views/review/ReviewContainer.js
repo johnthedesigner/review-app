@@ -37,7 +37,7 @@ export class Review extends React.Component {
 
   render() {
     let { review, reviewId, session } = this.props;
-    if (review.id) {
+    if (review && review.id) {
       return (
         <Container>
           <LoginRedirect session={this.props.session} />
