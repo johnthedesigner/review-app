@@ -41,7 +41,6 @@ export class Things extends React.Component {
 
   render() {
     let { things, session } = this.props;
-    console.log(things);
 
     return (
       <Container>
@@ -71,6 +70,9 @@ export class Things extends React.Component {
                     <Text>{thing.name}</Text>
                     <Text note>{thing.desc}</Text>
                   </Body>
+                  <Link to={`/things/${thing.id}/review-this`}>
+                    <Text>Review this</Text>
+                  </Link>
                 </ListItem>
               );
             })}
