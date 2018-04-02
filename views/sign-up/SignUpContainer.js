@@ -102,6 +102,11 @@ export class SignUp extends React.Component {
               <Text>Sign up</Text>
             </Button>
           </Form>
+          <Link to="/login">
+            <Text style={{ margin: 10, textAlign: "center" }}>
+              Back to login
+            </Text>
+          </Link>
         </Content>
       </Container>
     );

@@ -28,6 +28,7 @@ import {
 } from "native-base";
 
 import { postReview, requestThing } from "../../actions";
+import FooterNav from "../../FooterNav";
 
 // Redirect to login if there is no active session
 // TODO: also check for expired token
@@ -178,6 +179,7 @@ export class ReviewThis extends React.Component {
             </Col>
           </Grid>
         </Content>
+        <FooterNav />
       </Container>
     );
   }

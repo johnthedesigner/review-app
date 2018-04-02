@@ -23,7 +23,7 @@ import ReviewContainer from "./views/review/ReviewContainer";
 import SignUpContainer from "./views/sign-up/SignUpContainer";
 import ThingsContainer from "./views/things/ThingsContainer";
 import ReviewThisContainer from "./views/things/ReviewThisContainer";
-import FooterNav from "./FooterNav";
+import CreateThingContainer from "./views/things/CreateThingContainer";
 
 export default class App extends React.Component {
   async componentWillMount() {
@@ -53,8 +53,12 @@ export default class App extends React.Component {
                 path="/reviews/:reviewId"
                 component={ReviewContainer}
               />
+              <Route
+                exact
+                path="/things/new"
+                component={CreateThingContainer}
+              />
             </Content>
-            <FooterNav />
           </Container>
         </NativeRouter>
       </Provider>

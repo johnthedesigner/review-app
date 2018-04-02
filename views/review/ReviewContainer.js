@@ -18,6 +18,7 @@ import {
 } from "native-base";
 
 import { requestReview } from "../../actions";
+import FooterNav from "../../FooterNav";
 
 // Redirect to login if there is no active session
 // TODO: also check for expired token
@@ -73,12 +74,14 @@ export class Review extends React.Component {
               </Col>
             </Grid>
           </Content>
+          <FooterNav />
         </Container>
       );
     } else {
       return (
         <Container>
           <Text>Loading...</Text>
+          <FooterNav />
         </Container>
       );
     }

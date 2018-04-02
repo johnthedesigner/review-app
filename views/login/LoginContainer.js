@@ -22,7 +22,6 @@ import { tryLogin } from "../../actions";
 
 const LoginRedirect = props => {
   if (props.session && props.session.id) {
-    // return <Redirect to="/reviews/8a714160-d9cd-11e6-8055-4d319f90ce84" />;
     return <Redirect to="/" />;
   } else {
     return null;
@@ -83,6 +82,7 @@ export class Login extends React.Component {
                 autofocus={true}
                 value={username}
                 onChangeText={this.updateUsername}
+                onSubmitEditing={this.submitCredentials}
               />
             </Item>
             <Item floatingLabel>
@@ -91,6 +91,7 @@ export class Login extends React.Component {
                 secureTextEntry
                 value={password}
                 onChangeText={this.updatePassword}
+                onSubmitEditing={this.submitCredentials}
               />
             </Item>
             <Button

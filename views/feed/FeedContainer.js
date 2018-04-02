@@ -26,6 +26,7 @@ import {
 } from "native-base";
 
 import { requestFeed } from "../../actions";
+import FooterNav from "../../FooterNav";
 
 // Redirect to login if there is no active session
 // TODO: also check for expired token
@@ -48,19 +49,18 @@ export class Feed extends React.Component {
 
     return (
       <Container>
+        <Header>
+          <Left />
+          <Body>
+            <Title>Feed</Title>
+          </Body>
+          <Right />
+        </Header>
         <Content>
-          <Header>
-            <Left />
-            <Body>
-              <Title>Feed</Title>
-            </Body>
-            <Right />
-          </Header>
           <LoginRedirect session={session} />
           <List>
             {_.map(this.props.feed, item => {
               if (item.thing) {
-                console.log("there is a thing");
                 return (
                   <ListItem key={item.id}>
                     <Grid>
@@ -83,7 +83,7 @@ export class Feed extends React.Component {
                   </ListItem>
                 );
               } else {
-                console.log("there is no thing");
+                // TODO: Fix the back end to fix required fields
                 return (
                   <ListItem key={item.id}>
                     <Grid>
@@ -97,6 +97,7 @@ export class Feed extends React.Component {
             })}
           </List>
         </Content>
+        <FooterNav />
       </Container>
     );
   }
@@ -104,9 +105,12 @@ export class Feed extends React.Component {
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    feed: _.map(state.feed, reviewId => {
-      return state.reviewsById[reviewId];
-    }),
+    feed: _.orderBy(
+      _.map(state.feed, reviewId => {
+        return state.reviewsById[reviewId];
+      }),
+      "created"
+    ),
     session: state.session
   };
 };

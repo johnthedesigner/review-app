@@ -23,6 +23,7 @@ import {
 } from "native-base";
 
 import { requestThings } from "../../actions";
+import FooterNav from "../../FooterNav";
 
 // Redirect to login if there is no active session
 // TODO: also check for expired token
@@ -51,7 +52,7 @@ export class Things extends React.Component {
               <Title>Things</Title>
             </Body>
             <Right>
-              <Link to="/">
+              <Link to="/things/new">
                 <Text>New</Text>
               </Link>
             </Right>
@@ -78,6 +79,7 @@ export class Things extends React.Component {
             })}
           </List>
         </Content>
+        <FooterNav />
       </Container>
     );
   }

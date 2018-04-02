@@ -210,7 +210,6 @@ export function requestThing(thingId, session) {
 export function postReview(review, session, history) {
   return async dispatch => {
     try {
-      console.log(...review);
       let success = await axios.post(
         `https://review-api.herokuapp.com/api/reviews/?access_token=${
           session.id
@@ -221,6 +220,24 @@ export function postReview(review, session, history) {
       return success;
     } catch (error) {
       console.log("post review", error);
+      return error;
+    }
+  };
+}
+
+export function postThing(thing, session, history) {
+  return async dispatch => {
+    try {
+      let success = await axios.post(
+        `https://review-api.herokuapp.com/api/things/?access_token=${
+          session.id
+        }`,
+        thing
+      );
+      history.push(`/things/${success.data.id}`);
+      return success;
+    } catch (error) {
+      console.log("post thing", error);
       return error;
     }
   };
