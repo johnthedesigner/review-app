@@ -1,4 +1,6 @@
-import { applyMiddleware, createStore } from "redux";
+import { AsyncStorage } from "react-native";
+import { applyMiddleware, compose, createStore } from "redux";
+import { persistReducer, persistStore } from "redux-persist";
 import _ from "lodash";
 
 import {
@@ -78,9 +80,19 @@ const thunk = store => {
       return action(dispatch, getState);
     }
 
-    console.log(action.type);
+    console.log(action.type); // TODO: for devmode only
     return next(action);
   };
 };
 
-export const store = createStore(reducer, applyMiddleware(thunk));
+// Configure data persisting
+const persistConfig = {
+  key: "root",
+  storage: AsyncStorage
+};
+
+const persistedReducer = persistReducer(persistConfig, reducer);
+
+export let store = createStore(persistedReducer, {}, applyMiddleware(thunk));
+
+export let persistor = persistStore(store);

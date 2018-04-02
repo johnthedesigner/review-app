@@ -28,6 +28,7 @@
     "react-native": "0.52.0",
     "react-native-autogrow-textinput": "^5.1.1",
     "react-redux": "^5.0.7",
-    "react-router-native": "^4.2.0"
+    "react-router-native": "^4.2.0",
+    "redux-persist": "^5.9.1"
   }
 }

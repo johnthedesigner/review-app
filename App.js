@@ -2,6 +2,7 @@ import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { NativeRouter, Route, Link } from "react-router-native";
 import { Provider } from "react-redux";
+import { PersistGate } from "redux-persist/integration/react";
 import {
   Body,
   Button,
@@ -16,7 +17,7 @@ import {
   Title
 } from "native-base";
 
-import { store } from "./store";
+import { persistor, store } from "./store";
 import FeedContainer from "./views/feed/FeedContainer";
 import LoginContainer from "./views/login/LoginContainer";
 import ReviewContainer from "./views/review/ReviewContainer";
@@ -36,31 +37,33 @@ export default class App extends React.Component {
   render() {
     return (
       <Provider store={store}>
-        <NativeRouter>
-          <Container>
-            <Content>
-              <Route exact path="/" component={FeedContainer} />
-              <Route exact path="/login" component={LoginContainer} />
-              <Route exact path="/sign-up" component={SignUpContainer} />
-              <Route exact path="/things" component={ThingsContainer} />
-              <Route
-                exact
-                path="/things/:thingId/review-this"
-                component={ReviewThisContainer}
-              />
-              <Route
-                exact
-                path="/reviews/:reviewId"
-                component={ReviewContainer}
-              />
-              <Route
-                exact
-                path="/things/new"
-                component={CreateThingContainer}
-              />
-            </Content>
-          </Container>
-        </NativeRouter>
+        <PersistGate loading={null} persistor={persistor}>
+          <NativeRouter>
+            <Container>
+              <Content>
+                <Route exact path="/" component={FeedContainer} />
+                <Route exact path="/login" component={LoginContainer} />
+                <Route exact path="/sign-up" component={SignUpContainer} />
+                <Route exact path="/things" component={ThingsContainer} />
+                <Route
+                  exact
+                  path="/things/:thingId/review-this"
+                  component={ReviewThisContainer}
+                />
+                <Route
+                  exact
+                  path="/reviews/:reviewId"
+                  component={ReviewContainer}
+                />
+                <Route
+                  exact
+                  path="/things/new"
+                  component={CreateThingContainer}
+                />
+              </Content>
+            </Container>
+          </NativeRouter>
+        </PersistGate>
       </Provider>
     );
   }

@@ -1,4 +1,5 @@
 import axios from "axios";
+import { AsyncStorage } from "react-native";
 
 import {
   LOGIN_ERROR,
@@ -41,8 +42,8 @@ export function tryLogin(credentials) {
         "https://review-api.herokuapp.com/api/reviewers/login",
         credentials
       );
+      // await AsyncStorage.setItem("storedSession", JSON.stringify(success.data));
       dispatch(loginSuccess(success.data));
-      dispatch(requestUserData(success.data));
       return success;
     } catch (error) {
       console.log("try login", error);
