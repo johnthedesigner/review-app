@@ -84,7 +84,6 @@ export class Feed extends React.Component {
           <List>
             {_.map(this.props.feed, item => {
               if (item.thing && item.reviewer) {
-                console.log(item.reviewer);
                 return (
                   <ListItem key={item.id}>
                     <Grid>
