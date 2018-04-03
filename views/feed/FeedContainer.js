@@ -2,6 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { Link, Redirect } from "react-router-native";
 import _ from "lodash";
+import moment from "moment";
 import {
   Body,
   Button,
@@ -38,6 +39,28 @@ const LoginRedirect = props => {
   }
 };
 
+const FiveStars = props => {
+  // TODO: figure out what's going wrong when I move this into its own module
+  // Supply a star rating value from state and an optional onPress
+  let { value } = props;
+
+  // Make clickable stars that highlight when active
+  const Star = props => {
+    let color = value >= props.starNumber ? "#F2C94C" : "#DDDDDD";
+    return <Icon name="ios-star" style={{ color }} />;
+  };
+
+  return (
+    <Row>
+      <Star starNumber={1} />
+      <Star starNumber={2} />
+      <Star starNumber={3} />
+      <Star starNumber={4} />
+      <Star starNumber={5} />
+    </Row>
+  );
+};
+
 export class Feed extends React.Component {
   componentDidMount() {
     this.props.requestFeed(this.props.session);
@@ -52,7 +75,7 @@ export class Feed extends React.Component {
         <Header>
           <Left />
           <Body>
-            <Title>Feed</Title>
+            <Title>Home</Title>
           </Body>
           <Right />
         </Header>
@@ -60,7 +83,8 @@ export class Feed extends React.Component {
           <LoginRedirect session={session} />
           <List>
             {_.map(this.props.feed, item => {
-              if (item.thing) {
+              if (item.thing && item.reviewer) {
+                console.log(item.reviewer);
                 return (
                   <ListItem key={item.id}>
                     <Grid>
@@ -72,11 +96,16 @@ export class Feed extends React.Component {
                       </Col>
                       <Col>
                         <Body>
+                          <Text>@{item.reviewer.username}</Text>
                           <Text note>{item.thing.name}</Text>
+                          <FiveStars
+                            value={item.rating}
+                            style={{ margin: 10 }}
+                          />
                           <Link to={`/reviews/${item.id}`}>
-                            <Text>{item.title}</Text>
+                            <Text>{item.content}</Text>
                           </Link>
-                          <Text note>{item.content}</Text>
+                          <Text note>{moment(item.createdDate).fromNow()}</Text>
                         </Body>
                       </Col>
                     </Grid>
@@ -88,7 +117,7 @@ export class Feed extends React.Component {
                   <ListItem key={item.id}>
                     <Grid>
                       <Row>
-                        <Text key={item.id}>No thingId</Text>
+                        <Text key={item.id}>Missing thingId or reviewerId</Text>
                       </Row>
                     </Grid>
                   </ListItem>
@@ -109,7 +138,8 @@ const mapStateToProps = (state, ownProps) => {
       _.map(state.feed, reviewId => {
         return state.reviewsById[reviewId];
       }),
-      "created"
+      "createdDate",
+      "desc"
     ),
     session: state.session
   };
