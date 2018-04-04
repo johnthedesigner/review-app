@@ -14,10 +14,7 @@ import {
   TEST_ACTION
 } from "./constants";
 
-const APIRoot =
-  process.env.NODE_ENV === "development"
-    ? "http://0.0.0.0:8888/api"
-    : "https://review-api.herokuapp.com/api";
+const APIRoot = "https://review-api.herokuapp.com/api";
 
 export function testAction(payload) {
   return {
