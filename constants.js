@@ -1,6 +1,7 @@
 export const LOGIN_ERROR = "LOGIN_ERROR";
 export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
 export const LOG_OUT = "LOG_OUT";
+export const RECEIVE_CATEGORIES = "RECEIVE_CATEGORIES";
 export const RECEIVE_THING = "RECEIVE_THING";
 export const RECEIVE_THINGS = "RECEIVE_THINGS";
 export const RECEIVE_FEED = "RECEIVE_FEED";

@@ -19,7 +19,6 @@ import {
   Left,
   List,
   ListItem,
-  Picker,
   Radio,
   Right,
   Row,
@@ -28,7 +27,7 @@ import {
   Title
 } from "native-base";
 
-import { postThing, requestCategories } from "../../actions";
+import { postCategory } from "../../actions";
 import FooterNav from "../../FooterNav";
 
 // Redirect to login if there is no active session
@@ -41,34 +40,28 @@ const LoginRedirect = props => {
   }
 };
 
-export class CreateThing extends React.Component {
+export class CreateCategory extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       name: "",
-      desc: "",
-      categoryId: null
+      desc: ""
     };
-    this.submitThing = this.submitThing.bind(this);
+    this.submitCategory = this.submitCategory.bind(this);
     this.updateField = this.updateField.bind(this);
   }
 
-  componentDidMount() {
-    this.props.requestCategories(this.props.session);
-  }
-
-  submitThing() {
-    let { name, desc, categoryId } = this.state;
+  submitCategory() {
+    let { name, desc } = this.state;
     let { history, session } = this.props;
     let reviewerId = session.userId;
-    let thing = {
+    let category = {
       status: "published",
       name,
       desc,
-      reviewerId,
-      categoryId
+      reviewerId
     };
-    this.props.postThing(thing, session, history);
+    this.props.postCategory(category, session, history);
   }
 
   updateField(field, value) {
@@ -78,8 +71,7 @@ export class CreateThing extends React.Component {
   }
 
   render() {
-    let { categories, session } = this.props;
-    console.log(categories.length);
+    let { session } = this.props;
     let textBoxStyles = {
       backgroundColor: "#FFFFFF",
       marginTop: 5,
@@ -98,7 +90,7 @@ export class CreateThing extends React.Component {
               </Link>
             </Left>
             <Body>
-              <Title>New thing</Title>
+              <Title>New category</Title>
             </Body>
             <Right />
           </Header>
@@ -107,31 +99,6 @@ export class CreateThing extends React.Component {
             <Col style={{ margin: 10 }}>
               <Row style={{ flex: 1 }}>
                 <Col>
-                  <Picker
-                    mode="dropdown"
-                    placeholder="Select a category"
-                    note={false}
-                    selectedValue={this.state.categoryId}
-                    onValueChange={value => {
-                      this.updateField("categoryId", value);
-                    }}
-                    disabled={categories.length == 0}
-                  >
-                    {_.map(categories, category => {
-                      return (
-                        <Item
-                          key={category.id}
-                          label={category.name}
-                          value={category.id}
-                        />
-                      );
-                    })}
-                  </Picker>
-                  <Row>
-                    <Link to="/things/new-category">
-                      <Text>New category</Text>
-                    </Link>
-                  </Row>
                   <AutoGrowingTextInput
                     style={textBoxStyles}
                     placeholder="Name it"
@@ -143,7 +110,7 @@ export class CreateThing extends React.Component {
                   />
                   <AutoGrowingTextInput
                     style={textBoxStyles}
-                    placeholder="Describe this thing"
+                    placeholder="Describe this category"
                     minHeight={100}
                     onChange={e => {
                       this.updateField("desc", e.nativeEvent.text);
@@ -155,14 +122,10 @@ export class CreateThing extends React.Component {
               <Row>
                 <Button
                   block
-                  disabled={
-                    !this.state.name ||
-                    !this.state.desc ||
-                    !this.state.categoryId
-                  }
-                  onPress={this.submitThing}
+                  disabled={!this.state.name || !this.state.desc}
+                  onPress={this.submitCategory}
                 >
-                  <Text>Submit thing</Text>
+                  <Text>Submit category</Text>
                 </Button>
               </Row>
             </Col>
@@ -176,30 +139,20 @@ export class CreateThing extends React.Component {
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    categories: _.orderBy(
-      _.map(state.categoriesList, categoryId => {
-        return state.categoriesById[categoryId];
-      }),
-      "name",
-      "asc"
-    ),
     session: state.session
   };
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    postThing: (thing, session, history) => {
-      dispatch(postThing(thing, session, history));
-    },
-    requestCategories: session => {
-      dispatch(requestCategories(session));
+    postCategory: (category, session, history) => {
+      dispatch(postCategory(category, session, history));
     }
   };
 };
 
-const CreateThingContainer = connect(mapStateToProps, mapDispatchToProps)(
-  CreateThing
+const CreateCategoryContainer = connect(mapStateToProps, mapDispatchToProps)(
+  CreateCategory
 );
 
-export default CreateThingContainer;
+export default CreateCategoryContainer;

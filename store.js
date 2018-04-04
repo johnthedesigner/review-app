@@ -7,6 +7,7 @@ import {
   LOGIN_ERROR,
   LOGIN_SUCCESS,
   LOG_OUT,
+  RECEIVE_CATEGORIES,
   RECEIVE_FEED,
   RECEIVE_REVIEW,
   RECEIVE_THINGS,
@@ -43,6 +44,17 @@ const reducer = (state = {}, action) => {
         ),
         thingsList: _.map(action.things, thing => {
           return thing.id;
+        })
+      });
+
+    case RECEIVE_CATEGORIES:
+      return Object.assign({}, state, {
+        categoriesById: _.merge(
+          _.cloneDeep(state.categoriesById),
+          _.keyBy(action.categories, "id")
+        ),
+        categoriesList: _.map(action.categories, category => {
+          return category.id;
         })
       });
 

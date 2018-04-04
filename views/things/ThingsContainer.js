@@ -68,6 +68,7 @@ export class Things extends React.Component {
                     source={{ uri: "http://placehold.it/80/80" }}
                   />
                   <Body>
+                    <Text note>{thing.category.name}</Text>
                     <Text>{thing.name}</Text>
                     <Text note>{thing.desc}</Text>
                   </Body>

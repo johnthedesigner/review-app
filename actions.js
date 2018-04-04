@@ -5,6 +5,7 @@ import {
   LOGIN_ERROR,
   LOGIN_SUCCESS,
   LOG_OUT,
+  RECEIVE_CATEGORIES,
   RECEIVE_FEED,
   RECEIVE_REVIEW,
   RECEIVE_THING,
@@ -12,6 +13,11 @@ import {
   RECEIVE_USER,
   TEST_ACTION
 } from "./constants";
+
+const APIRoot =
+  process.env.NODE_ENV === "development"
+    ? "http://0.0.0.0:8888/api"
+    : "https://review-api.herokuapp.com/api";
 
 export function testAction(payload) {
   return {
@@ -39,10 +45,7 @@ export function tryLogin(credentials) {
   return async dispatch => {
     try {
       credentials.ttl = 60 * 60 * 24 * 7 * 4; // 4 weeks in seconds
-      let success = await axios.post(
-        "https://review-api.herokuapp.com/api/reviewers/login",
-        credentials
-      );
+      let success = await axios.post(`${APIRoot}/reviewers/login`, credentials);
       // await AsyncStorage.setItem("storedSession", JSON.stringify(success.data));
       dispatch(loginSuccess(success.data));
       return success;
@@ -78,10 +81,7 @@ export function trySignUp(credentials, history) {
   return async dispatch => {
     try {
       credentials.ttl = 60 * 60 * 24 * 7 * 4; // 4 weeks in seconds
-      let success = await axios.post(
-        "https://review-api.herokuapp.com/api/reviewers",
-        credentials
-      );
+      let success = await axios.post(`${APIRoot}/reviewers`, credentials);
       history.push("/login");
       return success;
     } catch (error) {
@@ -101,10 +101,9 @@ export function receiveUser(user) {
 export function requestUserData(session) {
   return async dispatch => {
     try {
-      let success = await axios.get(
-        `https://review-api.herokuapp.com/api/reviewers/${session.userId}`,
-        { params: { access_token: session.id } }
-      );
+      let success = await axios.get(`${APIRoot}/reviewers/${session.userId}`, {
+        params: { access_token: session.id }
+      });
       dispatch(receiveUser(success.data));
       return success;
     } catch (error) {
@@ -124,15 +123,12 @@ export function receiveFeed(reviews) {
 export function requestFeed(session) {
   return async dispatch => {
     try {
-      let success = await axios.get(
-        "https://review-api.herokuapp.com/api/reviews/",
-        {
-          params: {
-            access_token: session.id,
-            filter: { include: ["thing", "reviewer"] }
-          }
+      let success = await axios.get(`${APIRoot}/reviews/`, {
+        params: {
+          access_token: session.id,
+          filter: { include: ["thing", "reviewer"] }
         }
-      );
+      });
       dispatch(receiveFeed(success.data));
       return success;
     } catch (error) {
@@ -152,12 +148,9 @@ export function receiveThings(things) {
 export function requestThings(session) {
   return async dispatch => {
     try {
-      let success = await axios.get(
-        "https://review-api.herokuapp.com/api/things",
-        {
-          params: { access_token: session.id }
-        }
-      );
+      let success = await axios.get(`${APIRoot}/things`, {
+        params: { access_token: session.id, filter: { include: "category" } }
+      });
       dispatch(receiveThings(success.data));
       return success;
     } catch (error) {
@@ -177,12 +170,9 @@ export function receiveReview(review) {
 export function requestReview(reviewId, session) {
   return async dispatch => {
     try {
-      let success = await axios.get(
-        `https://review-api.herokuapp.com/api/reviews/${reviewId}`,
-        {
-          params: { access_token: session.id, filter: { include: "thing" } }
-        }
-      );
+      let success = await axios.get(`${APIRoot}/reviews/${reviewId}`, {
+        params: { access_token: session.id, filter: { include: "thing" } }
+      });
       dispatch(receiveReview(success.data));
       return success;
     } catch (error) {
@@ -193,6 +183,7 @@ export function requestReview(reviewId, session) {
 }
 
 export function receiveThing(thing) {
+  console.log(thing);
   return {
     type: RECEIVE_THING,
     thing
@@ -202,11 +193,13 @@ export function receiveThing(thing) {
 export function requestThing(thingId, session) {
   return async dispatch => {
     try {
-      console.log(`https://review-api.herokuapp.com/api/things/${thingId}`);
+      console.log(`${APIRoot}/things/${thingId}`);
       let success = await axios.get(
         `https://review-api.herokuapp.com/api/things/${thingId}`,
         {
-          params: { access_token: session.id }
+          params: {
+            access_token: session.id
+          }
         }
       );
       dispatch(receiveThing(success.data));
@@ -222,9 +215,7 @@ export function postReview(review, session, history) {
   return async dispatch => {
     try {
       let success = await axios.post(
-        `https://review-api.herokuapp.com/api/reviews/?access_token=${
-          session.id
-        }`,
+        `${APIRoot}/reviews/?access_token=${session.id}`,
         review
       );
       history.push(`/reviews/${success.data.id}`);
@@ -240,15 +231,51 @@ export function postThing(thing, session, history) {
   return async dispatch => {
     try {
       let success = await axios.post(
-        `https://review-api.herokuapp.com/api/things/?access_token=${
-          session.id
-        }`,
+        `${APIRoot}/things/?access_token=${session.id}`,
         thing
       );
       history.push(`/things/${success.data.id}`);
       return success;
     } catch (error) {
       console.log("post thing", error);
+      return error;
+    }
+  };
+}
+
+export function postCategory(category, session, history) {
+  return async dispatch => {
+    try {
+      let success = await axios.post(
+        `${APIRoot}/categories/?access_token=${session.id}`,
+        category
+      );
+      history.push("/things");
+      return success;
+    } catch (error) {
+      console.log("post thing", error);
+      return error;
+    }
+  };
+}
+
+export function receiveCategories(categories) {
+  return {
+    type: RECEIVE_CATEGORIES,
+    categories
+  };
+}
+
+export function requestCategories(session) {
+  return async dispatch => {
+    try {
+      let success = await axios.get(`${APIRoot}/categories`, {
+        params: { access_token: session.id }
+      });
+      dispatch(receiveCategories(success.data));
+      return success;
+    } catch (error) {
+      console.log("request categories", error);
       return error;
     }
   };

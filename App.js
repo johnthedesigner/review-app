@@ -25,6 +25,7 @@ import SignUpContainer from "./views/sign-up/SignUpContainer";
 import ThingsContainer from "./views/things/ThingsContainer";
 import ReviewThisContainer from "./views/things/ReviewThisContainer";
 import CreateThingContainer from "./views/things/CreateThingContainer";
+import CreateCategoryContainer from "./views/things/CreateCategoryContainer";
 
 export default class App extends React.Component {
   async componentWillMount() {
@@ -59,6 +60,11 @@ export default class App extends React.Component {
                   exact
                   path="/things/new"
                   component={CreateThingContainer}
+                />
+                <Route
+                  exact
+                  path="/things/new-category"
+                  component={CreateCategoryContainer}
                 />
               </Content>
             </Container>
