@@ -6,6 +6,7 @@ import _ from "lodash";
 import {
   LOGIN_ERROR,
   LOGIN_SUCCESS,
+  LOG_OUT,
   RECEIVE_FEED,
   RECEIVE_REVIEW,
   RECEIVE_THINGS,
@@ -25,6 +26,12 @@ const reducer = (state = {}, action) => {
     case LOGIN_ERROR:
       return Object.assign({}, state, {
         session: action.error,
+        user: null
+      });
+
+    case LOG_OUT:
+      return Object.assign({}, state, {
+        session: null,
         user: null
       });
 

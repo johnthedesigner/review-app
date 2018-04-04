@@ -67,7 +67,6 @@ export class ReviewThis extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      title: "TEMP", // TODO: Make sure title isn't required or eliminate
       content: "",
       rating: null
     };
@@ -76,12 +75,11 @@ export class ReviewThis extends React.Component {
   }
 
   submitReview() {
-    let { title, content, rating } = this.state;
+    let { content, rating } = this.state;
     let { history, session } = this.props;
     let thingId = this.props.thing.id;
     let reviewerId = session.userId;
     let review = {
-      title,
       content,
       rating,
       thingId,

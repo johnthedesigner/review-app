@@ -4,6 +4,7 @@ import { AsyncStorage } from "react-native";
 import {
   LOGIN_ERROR,
   LOGIN_SUCCESS,
+  LOG_OUT,
   RECEIVE_FEED,
   RECEIVE_REVIEW,
   RECEIVE_THING,
@@ -50,6 +51,12 @@ export function tryLogin(credentials) {
       dispatch(loginError(error));
       return error;
     }
+  };
+}
+
+export function logOut() {
+  return {
+    type: LOG_OUT
   };
 }
 
