@@ -115,7 +115,7 @@ export class ReviewThis extends React.Component {
         <Content>
           <Header>
             <Left>
-              <Link to={`/things/${thing.id}`}>
+              <Link to={"/things"}>
                 <Text>Back</Text>
               </Link>
             </Left>

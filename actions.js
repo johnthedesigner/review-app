@@ -231,6 +231,7 @@ export function postThing(thing, session, history) {
         `${APIRoot}/things/?access_token=${session.id}`,
         thing
       );
+      console.log(success);
       history.push(`/things/${success.data.id}`);
       return success;
     } catch (error) {
