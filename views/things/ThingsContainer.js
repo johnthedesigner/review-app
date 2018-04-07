@@ -63,7 +63,7 @@ export class Things extends React.Component {
             {_.map(this.props.things, thing => {
               return (
                 <ListItem key={thing.id}>
-                  <QRThumbnail id={thing.id} source={thing.imageURI} />
+                  <QRThumbnail id={thing.id} sourceURI={thing.image} />
                   <Body>
                     <Text note>{thing.category.name}</Text>
                     <Text>{thing.name}</Text>

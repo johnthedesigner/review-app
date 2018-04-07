@@ -3,8 +3,9 @@ import { Image } from "react-native";
 import { connect } from "react-redux";
 import { Link, Redirect } from "react-router-native";
 import _ from "lodash";
+import cloudinary from "cloudinary-core";
 import { AutoGrowingTextInput } from "react-native-autogrow-textinput";
-import { ImagePicker } from "expo";
+import { ImagePicker, ImageManipulator } from "expo";
 import {
   Body,
   Button,
@@ -50,9 +51,7 @@ export class CreateThing extends React.Component {
       name: "",
       desc: "",
       categoryId: null,
-      selectedImageURI: "http://placehold.it/50x50",
-      selectedImage: null,
-      imagePickerActive: false
+      image: null
     };
     this.submitThing = this.submitThing.bind(this);
     this.showImagePicker = this.showImagePicker.bind(this);
@@ -64,16 +63,18 @@ export class CreateThing extends React.Component {
   }
 
   submitThing() {
-    let { name, desc, categoryId } = this.state;
+    let { categoryId, desc, image, name } = this.state;
     let { history, session } = this.props;
     let reviewerId = session.userId;
     let thing = {
-      status: "published",
-      name,
+      categoryId,
       desc,
+      image,
+      name,
       reviewerId,
-      categoryId
+      status: "published"
     };
+    console.log(thing);
     this.props.postThing(thing, session, history);
   }
 
@@ -90,10 +91,19 @@ export class CreateThing extends React.Component {
     })
       .then(result => {
         if (!result.cancelled) {
-          this.setState({
-            selectedImage: result.base64,
-            selectedImageURI: result.uri
-          });
+          ImageManipulator.manipulate(
+            result.uri,
+            [{ resize: { width: 400, height: 400 } }],
+            { base64: true, compress: 0.7, format: "jpeg" }
+          )
+            .then(result => {
+              this.setState({
+                image: `data:image/jpg;base64,${result.base64}`
+              });
+            })
+            .catch(error => {
+              console.log("ImageManipulator error: ", error);
+            });
         }
       })
       .catch(error => {
@@ -134,7 +144,9 @@ export class CreateThing extends React.Component {
                   <Row style={{ marginBottom: 20 }}>
                     <Image
                       style={{ width: 80, height: 80 }}
-                      source={{ uri: this.state.selectedImageURI }}
+                      source={{
+                        uri: this.state.image || "http://placehold.it/50x50"
+                      }}
                     />
                     <Button transparent onPress={this.showImagePicker}>
                       <Text>Choose</Text>
