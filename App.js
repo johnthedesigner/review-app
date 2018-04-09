@@ -27,6 +27,7 @@ import ReviewThisContainer from "./views/things/ReviewThisContainer";
 import CreateThingContainer from "./views/things/CreateThingContainer";
 import CreateCategoryContainer from "./views/things/CreateCategoryContainer";
 import UserProfileContainer from "./views/profile/UserProfileContainer";
+import EditProfileContainer from "./views/profile/EditProfileContainer";
 
 export default class App extends React.Component {
   async componentWillMount() {
