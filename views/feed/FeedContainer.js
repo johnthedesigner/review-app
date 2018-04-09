@@ -28,16 +28,7 @@ import {
 
 import { requestFeed } from "../../actions";
 import FooterNav from "../../FooterNav";
-
-// Redirect to login if there is no active session
-// TODO: also check for expired token
-const LoginRedirect = props => {
-  if (!props.session || !props.session.id) {
-    return <Redirect to="/login" />;
-  } else {
-    return null;
-  }
-};
+import LoginRedirect from "../../LoginRedirect";
 
 const FiveStars = props => {
   // TODO: figure out what's going wrong when I move this into its own module

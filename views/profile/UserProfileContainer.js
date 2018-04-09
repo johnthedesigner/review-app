@@ -22,25 +22,18 @@ import {
 } from "native-base";
 import { Link } from "react-router-native";
 
-import { requestMyReviews, requestUserData } from "../../actions";
+import { logOut, requestMyReviews, requestUserData } from "../../actions";
 import FooterNav from "../../FooterNav";
-
-const LoginRedirect = props => {
-  if (!props.session || !props.session.id) {
-    return <Redirect to="/login" />;
-  } else {
-    return null;
-  }
-};
+import LoginRedirect from "../../LoginRedirect";
 
 class UserProfile extends React.Component {
-  componentDidMount() {
+  componentWillMount() {
     this.props.requestMyReviews(this.props.session);
     this.props.requestUserData(this.props.session);
   }
 
   render() {
-    let { history, myReviews, session, user } = this.props;
+    let { history, logOut, myReviews, session, user } = this.props;
     console.log(session);
 
     return (
@@ -51,9 +44,9 @@ class UserProfile extends React.Component {
             <Title>Profile</Title>
           </Body>
           <Right>
-            <Link to="/profile/edit">
-              <Text>Edit</Text>
-            </Link>
+            <Button transparent onPress={logOut}>
+              <Text>Log out</Text>
+            </Button>
           </Right>
         </Header>
         <Content>
@@ -66,7 +59,7 @@ class UserProfile extends React.Component {
               />
             </Row>
             <Row>
-              <Text>@{user.username}</Text>
+              <Text>@{user ? user.username : ""}</Text>
             </Row>
             <Row>
               <Button
@@ -122,6 +115,9 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
+    logOut: () => {
+      dispatch(logOut());
+    },
     requestMyReviews: session => {
       dispatch(requestMyReviews(session));
     },

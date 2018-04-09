@@ -25,16 +25,7 @@ import {
 import { requestThings } from "../../actions";
 import FooterNav from "../../FooterNav";
 import Thing from "./Thing";
-
-// Redirect to login if there is no active session
-// TODO: also check for expired token
-const LoginRedirect = props => {
-  if (!props.session || !props.session.id) {
-    return <Redirect to="/login" />;
-  } else {
-    return null;
-  }
-};
+import LoginRedirect from "../../LoginRedirect";
 
 export class Things extends React.Component {
   componentDidMount() {

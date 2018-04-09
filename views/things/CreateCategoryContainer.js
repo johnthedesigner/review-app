@@ -29,16 +29,7 @@ import {
 
 import { postCategory } from "../../actions";
 import FooterNav from "../../FooterNav";
-
-// Redirect to login if there is no active session
-// TODO: also check for expired token
-const LoginRedirect = props => {
-  if (!props.session || !props.session.id) {
-    return <Redirect to="/login" />;
-  } else {
-    return null;
-  }
-};
+import LoginRedirect from "../../LoginRedirect";
 
 export class CreateCategory extends React.Component {
   constructor(props) {

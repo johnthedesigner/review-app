@@ -3,13 +3,12 @@ import { connect } from "react-redux";
 import { NativeRouter, Route, Link } from "react-router-native";
 import { Button, Container, Footer, FooterTab, Icon, Text } from "native-base";
 
-import { logOut } from "./actions";
-
 const NavItem = props => {
   const iconStyle = {
     color: "#FFFFFF"
   };
 
+  // TODO: Figure out if this is necessary now that "Log out has moved"
   if (props.to) {
     return (
       <Button vertical>
@@ -43,11 +42,6 @@ class FooterNav extends React.Component {
         <FooterTab>
           <NavItem icon="home" text="Home" to="/" />
           <NavItem icon="list" text="Things" to="/things" />
-          <NavItem
-            icon="close-circle"
-            text="Log out"
-            onPress={this.props.logOut}
-          />
           <NavItem icon="contact" text="Profile" to="/profile" />
         </FooterTab>
       </Footer>
@@ -55,14 +49,6 @@ class FooterNav extends React.Component {
   }
 }
 
-const mapDispatchToProps = (dispatch, ownProps) => {
-  return {
-    logOut: () => {
-      dispatch(logOut());
-    }
-  };
-};
-
-const FooterNavContainer = connect(null, mapDispatchToProps)(FooterNav);
+const FooterNavContainer = connect(null, null)(FooterNav);
 
 export default FooterNavContainer;
