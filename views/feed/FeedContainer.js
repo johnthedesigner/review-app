@@ -53,24 +53,11 @@ export class Feed extends React.Component {
           <LoginRedirect session={session} />
           <List>
             {_.map(this.props.feed, item => {
-              if (item.thing && item.reviewer) {
-                return (
-                  <ListItem key={item.id}>
-                    <ReviewListItem review={item} />
-                  </ListItem>
-                );
-              } else {
-                // TODO: Fix the back end to fix required fields
-                return (
-                  <ListItem key={item.id}>
-                    <Grid>
-                      <Row>
-                        <Text key={item.id}>Missing thingId or reviewerId</Text>
-                      </Row>
-                    </Grid>
-                  </ListItem>
-                );
-              }
+              return (
+                <ListItem key={item.id}>
+                  <ReviewListItem review={item} />
+                </ListItem>
+              );
             })}
           </List>
         </Content>
