@@ -77,7 +77,6 @@ export class ReviewThis extends React.Component {
       thingId,
       reviewerId
     };
-    console.log(review);
     this.props.postReview(review, session, history);
   }
 

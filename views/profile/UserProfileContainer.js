@@ -35,7 +35,6 @@ class UserProfile extends React.Component {
 
   render() {
     let { history, logOut, myReviews, session, user } = this.props;
-    console.log(session);
 
     return (
       <Container>

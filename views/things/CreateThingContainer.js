@@ -65,7 +65,6 @@ export class CreateThing extends React.Component {
       reviewerId,
       status: "published"
     };
-    console.log(thing);
     this.props.postThing(thing, session, history);
   }
 

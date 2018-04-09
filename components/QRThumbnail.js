@@ -5,7 +5,6 @@ import { Thumbnail } from "native-base";
 import QRCode from "react-native-qrcode";
 
 const QRThumbnail = props => {
-  console.log(props);
   // Supply a star rating value from state and an optional onPress
   let { id, size, sourceURI } = props;
 

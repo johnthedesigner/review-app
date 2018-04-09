@@ -25,7 +25,6 @@ export function testAction(payload) {
 }
 
 export function loginSuccess(session) {
-  console.log("session", session);
   return {
     type: LOGIN_SUCCESS,
     session
@@ -219,15 +218,11 @@ export function receiveThing(thing) {
 export function requestThing(thingId, session) {
   return async dispatch => {
     try {
-      console.log(`${APIRoot}/things/${thingId}`);
-      let success = await axios.get(
-        `https://review-api.herokuapp.com/api/things/${thingId}`,
-        {
-          params: {
-            access_token: session.id
-          }
+      let success = await axios.get(`${APIRoot}/things/${thingId}`, {
+        params: {
+          access_token: session.id
         }
-      );
+      });
       dispatch(receiveThing(success.data));
       return success;
     } catch (error) {
@@ -260,7 +255,6 @@ export function postThing(thing, session, history) {
         `${APIRoot}/things/?access_token=${session.id}`,
         thing
       );
-      console.log(success);
       history.push(`/things/${success.data.id}`);
       return success;
     } catch (error) {
