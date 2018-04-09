@@ -25,6 +25,7 @@ import { Link } from "react-router-native";
 import { logOut, requestMyReviews, requestUserData } from "../../actions";
 import FooterNav from "../../FooterNav";
 import LoginRedirect from "../../LoginRedirect";
+import ReviewListItem from "../../components/ReviewListItem";
 
 class UserProfile extends React.Component {
   componentWillMount() {
@@ -82,7 +83,7 @@ class UserProfile extends React.Component {
                     {_.map(myReviews, review => {
                       return (
                         <ListItem key={review.id}>
-                          <Text>{review.content}</Text>
+                          <ReviewListItem review={review} />
                         </ListItem>
                       );
                     })}

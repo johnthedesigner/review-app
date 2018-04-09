@@ -29,28 +29,7 @@ import {
 import { requestFeed } from "../../actions";
 import FooterNav from "../../FooterNav";
 import LoginRedirect from "../../LoginRedirect";
-
-const FiveStars = props => {
-  // TODO: figure out what's going wrong when I move this into its own module
-  // Supply a star rating value from state and an optional onPress
-  let { value } = props;
-
-  // Make clickable stars that highlight when active
-  const Star = props => {
-    let color = value >= props.starNumber ? "#F2C94C" : "#DDDDDD";
-    return <Icon name="ios-star" style={{ color }} />;
-  };
-
-  return (
-    <Row>
-      <Star starNumber={1} />
-      <Star starNumber={2} />
-      <Star starNumber={3} />
-      <Star starNumber={4} />
-      <Star starNumber={5} />
-    </Row>
-  );
-};
+import ReviewListItem from "../../components/ReviewListItem";
 
 export class Feed extends React.Component {
   componentDidMount() {
@@ -77,28 +56,7 @@ export class Feed extends React.Component {
               if (item.thing && item.reviewer) {
                 return (
                   <ListItem key={item.id}>
-                    <Grid>
-                      <Col style={{ width: 70 }}>
-                        <Thumbnail
-                          size={80}
-                          source={{ uri: "http://placehold.it/80/80" }}
-                        />
-                      </Col>
-                      <Col>
-                        <Body>
-                          <Text>@{item.reviewer.username}</Text>
-                          <Text note>{item.thing.name}</Text>
-                          <FiveStars
-                            value={item.rating}
-                            style={{ margin: 10 }}
-                          />
-                          <Link to={`/reviews/${item.id}`}>
-                            <Text>{item.content}</Text>
-                          </Link>
-                          <Text note>{moment(item.createdDate).fromNow()}</Text>
-                        </Body>
-                      </Col>
-                    </Grid>
+                    <ReviewListItem review={item} />
                   </ListItem>
                 );
               } else {
