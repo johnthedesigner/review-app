@@ -9,6 +9,7 @@ import {
   LOG_OUT,
   RECEIVE_CATEGORIES,
   RECEIVE_FEED,
+  RECEIVE_MY_REVIEWS,
   RECEIVE_REVIEW,
   RECEIVE_THINGS,
   RECEIVE_USER,
@@ -65,6 +66,17 @@ const reducer = (state = {}, action) => {
           _.keyBy(action.reviews, "id")
         ),
         feed: _.map(action.reviews, review => {
+          return review.id;
+        })
+      });
+
+    case RECEIVE_MY_REVIEWS:
+      return Object.assign({}, state, {
+        reviewsById: _.merge(
+          _.cloneDeep(state.reviewsById),
+          _.keyBy(action.reviews, "id")
+        ),
+        myReviews: _.map(action.reviews, review => {
           return review.id;
         })
       });

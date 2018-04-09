@@ -7,12 +7,14 @@ import QRCode from "react-native-qrcode";
 const QRThumbnail = props => {
   console.log(props);
   // Supply a star rating value from state and an optional onPress
-  let { id, sourceURI } = props;
+  let { id, size, sourceURI } = props;
 
   if (sourceURI) {
-    return <Thumbnail source={{ uri: sourceURI }} large />;
+    return <Thumbnail square source={{ uri: sourceURI }} large />;
   } else {
-    return <QRCode value={id} size={80} bgColor="purple" fgColor="white" />;
+    return (
+      <QRCode value={id} size={size || 80} bgColor="purple" fgColor="white" />
+    );
   }
 };
 

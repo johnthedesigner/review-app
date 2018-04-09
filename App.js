@@ -26,6 +26,7 @@ import ThingsContainer from "./views/things/ThingsContainer";
 import ReviewThisContainer from "./views/things/ReviewThisContainer";
 import CreateThingContainer from "./views/things/CreateThingContainer";
 import CreateCategoryContainer from "./views/things/CreateCategoryContainer";
+import UserProfileContainer from "./views/profile/UserProfileContainer";
 
 export default class App extends React.Component {
   async componentWillMount() {
@@ -66,6 +67,7 @@ export default class App extends React.Component {
                   path="/things/new-category"
                   component={CreateCategoryContainer}
                 />
+                <Route exact path="/profile" component={UserProfileContainer} />
               </Content>
             </Container>
           </NativeRouter>

@@ -42,13 +42,13 @@ class FooterNav extends React.Component {
       <Footer style={{ backgroundColor: "#BB6BD9" }}>
         <FooterTab>
           <NavItem icon="home" text="Home" to="/" />
-          <NavItem icon="search" text="Search" to="/search" />
           <NavItem icon="list" text="Things" to="/things" />
           <NavItem
             icon="close-circle"
             text="Log out"
             onPress={this.props.logOut}
           />
+          <NavItem icon="contact" text="Profile" to="/profile" />
         </FooterTab>
       </Footer>
     );

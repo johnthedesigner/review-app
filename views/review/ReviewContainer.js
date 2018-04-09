@@ -51,11 +51,8 @@ export class Review extends React.Component {
           </Header>
           <Content padder>
             <Grid>
-              <Col style={{ width: 70 }}>
-                <Thumbnail
-                  size={80}
-                  source={{ uri: "http://placehold.it/160" }}
-                />
+              <Col style={{ width: 60 }}>
+                <Thumbnail small source={{ uri: "http://placehold.it/160" }} />
               </Col>
               <Col>
                 <Body>

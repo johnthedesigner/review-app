@@ -7,6 +7,7 @@ import {
   LOG_OUT,
   RECEIVE_CATEGORIES,
   RECEIVE_FEED,
+  RECEIVE_MY_REVIEWS,
   RECEIVE_REVIEW,
   RECEIVE_THING,
   RECEIVE_THINGS,
@@ -127,6 +128,34 @@ export function requestFeed(session) {
         }
       });
       dispatch(receiveFeed(success.data));
+      return success;
+    } catch (error) {
+      console.log("request feed", error);
+      return error;
+    }
+  };
+}
+
+export function receiveMyReviews(reviews) {
+  return {
+    type: RECEIVE_MY_REVIEWS,
+    reviews
+  };
+}
+
+export function requestMyReviews(session) {
+  return async dispatch => {
+    try {
+      let success = await axios.get(`${APIRoot}/reviews/`, {
+        params: {
+          access_token: session.id,
+          filter: {
+            include: ["thing", "reviewer"],
+            where: { reviewerId: session.userId }
+          }
+        }
+      });
+      dispatch(receiveMyReviews(success.data));
       return success;
     } catch (error) {
       console.log("request feed", error);

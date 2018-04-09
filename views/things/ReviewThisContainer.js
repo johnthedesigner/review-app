@@ -27,6 +27,7 @@ import {
   Title
 } from "native-base";
 
+import Thing from "./Thing";
 import { postReview, requestThing } from "../../actions";
 import FooterNav from "../../FooterNav";
 
@@ -127,27 +128,16 @@ export class ReviewThis extends React.Component {
           <LoginRedirect session={session} />
           <Grid>
             <Col style={{ margin: 10 }}>
+              <Thing thing={thing} />
               <Row
                 style={{
-                  borderBottomColor: "#DDDDDD",
+                  flex: 1,
+                  borderTopColor: "#DDDDDD",
                   borderStyle: "solid",
-                  borderBottomWidth: 1,
-                  marginBottom: 10
+                  borderTopWidth: 1,
+                  marginTop: 10
                 }}
               >
-                <Thumbnail
-                  square
-                  size={80}
-                  source={{ uri: "http://placehold.it/80/80" }}
-                />
-                <Body>
-                  <Left>
-                    <Text>{thing.name}</Text>
-                    <Text note>{thing.desc}</Text>
-                  </Left>
-                </Body>
-              </Row>
-              <Row style={{ flex: 1 }}>
                 <Col>
                   <FiveStars
                     value={this.state.rating}

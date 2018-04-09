@@ -24,7 +24,7 @@ import {
 
 import { requestThings } from "../../actions";
 import FooterNav from "../../FooterNav";
-import QRThumbnail from "../../components/QRThumbnail";
+import Thing from "./Thing";
 
 // Redirect to login if there is no active session
 // TODO: also check for expired token
@@ -63,15 +63,7 @@ export class Things extends React.Component {
             {_.map(this.props.things, thing => {
               return (
                 <ListItem key={thing.id}>
-                  <QRThumbnail id={thing.id} sourceURI={thing.image} />
-                  <Body>
-                    <Text note>{thing.category.name}</Text>
-                    <Text>{thing.name}</Text>
-                    <Text note>{thing.desc}</Text>
-                  </Body>
-                  <Link to={`/things/${thing.id}/review-this`}>
-                    <Text>Review this</Text>
-                  </Link>
+                  <Thing thing={thing} />
                 </ListItem>
               );
             })}
