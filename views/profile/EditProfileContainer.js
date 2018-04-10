@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-native";
 import { connect } from "react-redux";
 import {
   Body,
@@ -9,7 +10,6 @@ import {
   Grid,
   Header,
   Input,
-  Image,
   Item,
   Label,
   Left,
@@ -17,23 +17,97 @@ import {
   Right,
   Row,
   Text,
+  Thumbnail,
   Title
 } from "native-base";
 import { AutoGrowingTextInput } from "react-native-autogrow-textinput";
 import { ImagePicker, ImageManipulator } from "expo";
 
-import { editUser } from "../../actions";
+import { updateUserData, requestUserData } from "../../actions";
 import FooterNav from "../../FooterNav";
 import LoginRedirect from "../../LoginRedirect";
 
 class EditProfile extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      email: null,
+      image: null,
+      password1: null,
+      password2: null
+    };
+    this.postUserUpdates = this.postUserUpdates.bind(this);
+    this.showImagePicker = this.showImagePicker.bind(this);
+    this.updateField = this.updateField.bind(this);
+  }
+
+  componentDidMount() {
+    this.props.requestUserData(this.props.session);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.user && nextProps.user.email) {
+      this.setState({
+        email: nextProps.user.email,
+        image: nextProps.user.image
+      });
+    }
+  }
+
+  postUserUpdates() {
+    let { email, image, password1, password2 } = this.state;
+    let { history, session } = this.props;
+    let reviewerId = session.userId;
+    let thing = {
+      categoryId,
+      desc,
+      image,
+      name,
+      reviewerId,
+      status: "published"
+    };
+    this.props.updateUser(user, session, history);
+  }
+
+  updateField(field, value) {
+    let newState = {};
+    newState[field] = value;
+    this.setState(newState);
+  }
+
+  showImagePicker(e) {
+    ImagePicker.launchImageLibraryAsync({
+      quality: 0.9,
+      base64: true
+    })
+      .then(result => {
+        if (!result.cancelled) {
+          ImageManipulator.manipulate(
+            result.uri,
+            [{ resize: { width: 400, height: 400 } }],
+            { base64: true, compress: 0.7, format: "jpeg" }
+          )
+            .then(result => {
+              this.props.updateUserData(
+                {
+                  image: `data:image/jpg;base64,${result.base64}`
+                },
+                this.props.session
+              );
+            })
+            .catch(error => {
+              console.log("ImageManipulator error: ", error);
+            });
+        }
+      })
+      .catch(error => {
+        console.log("ImagePicker error: ", error);
+      });
   }
 
   render() {
-    let { session } = this.props;
+    let { session, user } = this.props;
+    let { email, image, password1, password2 } = this.state;
     let textBoxStyles = {
       backgroundColor: "#FFFFFF",
       marginTop: 5,
@@ -45,7 +119,11 @@ class EditProfile extends React.Component {
     return (
       <Container>
         <Header>
-          <Left />
+          <Left>
+            <Link to="/profile">
+              <Text>Back</Text>
+            </Link>
+          </Left>
           <Body>
             <Title>Edit Profile</Title>
           </Body>
@@ -56,60 +134,43 @@ class EditProfile extends React.Component {
           <Grid>
             <Col style={{ margin: 10 }}>
               <Row style={{ flex: 1 }}>
-                <Col>
-                  <Label>Select a thumbnail image</Label>
-                  <Row style={{ marginBottom: 20 }}>
-                    <Image
-                      style={{ width: 80, height: 80 }}
+                <Col style={{ alignItems: "center" }}>
+                  <Col
+                    style={{
+                      alignItems: "center",
+                      marginTop: 20,
+                      marginBottom: 20
+                    }}
+                  >
+                    <Text style={{ marginBottom: 20 }}>@{user.username}</Text>
+                    <Thumbnail
+                      large
                       source={{
-                        uri: this.state.image || "http://placehold.it/50x50"
+                        uri: this.state.image || "http://placehold.it/200x200"
                       }}
                     />
                     <Button transparent onPress={this.showImagePicker}>
                       <Text>Choose</Text>
                     </Button>
-                  </Row>
+                  </Col>
                   <Row style={{ marginBottom: 20 }}>
                     <Col>
-                      <Label>Name</Label>
+                      <Label>Email address</Label>
                       <Item floatingLabel>
                         <Input
-                          placeholder="Name it"
                           onChange={e => {
-                            this.updateField("name", e.nativeEvent.text);
+                            this.updateField("email", e.nativeEvent.text);
                           }}
-                          value={this.state.name}
+                          value={email}
                         />
                       </Item>
-                    </Col>
-                  </Row>
-                  <Row style={{ marginBottom: 20 }}>
-                    <Col>
-                      <Label>Description</Label>
-                      <AutoGrowingTextInput
-                        style={textBoxStyles}
-                        placeholder="Describe this thing"
-                        minHeight={100}
-                        onChange={e => {
-                          this.updateField("desc", e.nativeEvent.text);
-                        }}
-                        value={this.state.desc}
-                      />
                     </Col>
                   </Row>
                 </Col>
               </Row>
               <Row>
-                <Button
-                  block
-                  disabled={
-                    !this.state.name ||
-                    !this.state.desc ||
-                    !this.state.categoryId
-                  }
-                  onPress={this.submitThing}
-                >
-                  <Text>Submit thing</Text>
+                <Button block onPress={this.submitThing}>
+                  <Text>Update settings</Text>
                 </Button>
               </Row>
             </Col>
@@ -123,14 +184,18 @@ class EditProfile extends React.Component {
 
 mapStateToProps = (state, ownProps) => {
   return {
-    session: state.session
+    session: state.session,
+    user: state.user
   };
 };
 
 mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    editUser: user => {
-      dispatch(editUser(user));
+    requestUserData: session => {
+      dispatch(requestUserData(session));
+    },
+    updateUserData: (user, session) => {
+      dispatch(updateUserData(user, session));
     }
   };
 };

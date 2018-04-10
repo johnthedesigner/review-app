@@ -110,6 +110,25 @@ export function requestUserData(session) {
   };
 }
 
+export function updateUserData(user, session) {
+  console.log(session);
+  console.log(...user);
+  return async dispatch => {
+    try {
+      let success = await axios.put(
+        `${APIRoot}/reviewers/${session.userId}?access_token=${session.id}`,
+        user
+      );
+      console.log(success.data);
+      dispatch(receiveUser(success.data));
+      return success;
+    } catch (error) {
+      console.log("update user data", error);
+      return error;
+    }
+  };
+}
+
 export function receiveFeed(reviews) {
   return {
     type: RECEIVE_FEED,

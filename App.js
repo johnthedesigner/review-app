@@ -69,6 +69,11 @@ export default class App extends React.Component {
                   component={CreateCategoryContainer}
                 />
                 <Route exact path="/profile" component={UserProfileContainer} />
+                <Route
+                  exact
+                  path="/profile/edit"
+                  component={EditProfileContainer}
+                />
               </Content>
             </Container>
           </NativeRouter>
