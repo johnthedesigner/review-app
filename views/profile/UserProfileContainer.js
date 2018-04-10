@@ -55,7 +55,7 @@ class UserProfile extends React.Component {
             <Row style={{ margin: 20 }}>
               <Thumbnail
                 large
-                source={{ uri: "http://placehold.it/400x400" }}
+                source={{ uri: user.image || "http://placehold.it/400x400" }}
               />
             </Row>
             <Row>

@@ -146,6 +146,23 @@ export class CreateThing extends React.Component {
                     <Col>
                       <Label>Select a category</Label>
                       <Picker
+                        renderHeader={backAction => (
+                          <Header>
+                            <Left>
+                              <Button transparent onPress={backAction}>
+                                <Icon name="arrow-back" />
+                              </Button>
+                            </Left>
+                            <Body style={{ flex: 3 }}>
+                              <Title>Select a category</Title>
+                            </Body>
+                            <Right>
+                              <Link to="/things/new-category">
+                                <Text>New</Text>
+                              </Link>
+                            </Right>
+                          </Header>
+                        )}
                         mode="dropdown"
                         placeholder="Make a selection"
                         note={false}

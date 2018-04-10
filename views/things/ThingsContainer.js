@@ -33,7 +33,7 @@ export class Things extends React.Component {
   }
 
   render() {
-    let { things, session } = this.props;
+    let { history, things, session } = this.props;
 
     return (
       <Container>
@@ -54,7 +54,12 @@ export class Things extends React.Component {
             {_.map(this.props.things, thing => {
               return (
                 <ListItem key={thing.id}>
-                  <Thing thing={thing} />
+                  <Thing
+                    thing={thing}
+                    onPress={() =>
+                      history.push(`/things/${thing.id}/review-this`)
+                    }
+                  />
                 </ListItem>
               );
             })}
@@ -68,6 +73,7 @@ export class Things extends React.Component {
 
 const mapStateToProps = (state, ownProps) => {
   return {
+    history: ownProps.history,
     things: _.map(state.thingsList, thingId => {
       return state.thingsById[thingId];
     }),

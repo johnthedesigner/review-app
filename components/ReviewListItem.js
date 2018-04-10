@@ -31,7 +31,10 @@ const ReviewListItem = props => {
   return (
     <Grid>
       <Col style={{ width: 70 }}>
-        <Thumbnail size={80} source={{ uri: "http://placehold.it/80/80" }} />
+        <Thumbnail
+          size={80}
+          source={{ uri: review.reviewer.image || "http://placehold.it/80/80" }}
+        />
       </Col>
       <Col>
         <Body>
